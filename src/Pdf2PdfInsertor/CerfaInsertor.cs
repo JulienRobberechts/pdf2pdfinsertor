@@ -18,10 +18,11 @@ namespace PdfTests
         {
             var results = actions.Select(a => CreatePdfPage(a)).ToList();
 
-            var finalPdfPath = outputDirPath + outputFileName + ".pdf";
-
             // Concat each page into a single file....
-            PdfAgregator.ConcatPages(results, finalPdfPath);
+            var pageSize = PdfAgregator.GetPageSize(results.First().Action.ModelPdfPath);
+
+            var finalPdfPath = outputDirPath + outputFileName + ".pdf";
+            PdfAgregator.ConcatPages(results, finalPdfPath, pageSize);
         }
 
         public static PdfActionResult CreatePdfPage(PdfActionInsertImage action)
