@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdf2PdfInsertor", "Pdf2PdfInsertor\Pdf2PdfInsertor.csproj", "{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdf2PdfInsertor.Test", "Pdf2PdfInsertor.Test\Pdf2PdfInsertor.Test.csproj", "{B9434D6E-EF63-423B-874C-0FEF00BE6B04}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9434D6E-EF63-423B-874C-0FEF00BE6B04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9434D6E-EF63-423B-874C-0FEF00BE6B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9434D6E-EF63-423B-874C-0FEF00BE6B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9434D6E-EF63-423B-874C-0FEF00BE6B04}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ABEBE2C0-F45E-4685-AE30-1D48C5A2F4A1}
+	EndGlobalSection
+EndGlobal
