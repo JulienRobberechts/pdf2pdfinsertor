@@ -22,44 +22,82 @@ namespace PdfTests
 
         private static IEnumerable<PdfActionInsertImage> BuildActions(string formPdfPath, string rectoPdfPath, string versoPdfPath)
         {
-            var actions = new List<PdfActionInsertImage>
+            var actions = new List<PdfActionInsertImage>();
+
+            var rectoPageCount = 15;
+            var versoPageCount = 15;
+
+            var totalPageCount = rectoPageCount + versoPageCount;
+
+            for (int i = 1; i <= totalPageCount; i++)
             {
-                new PdfActionInsertImage
+                var a = new PdfActionInsertImage()
                 {
-                    ResultPageIndex = 1,
+                    ResultPageIndex = i,
                     ModelPdfPath = formPdfPath,
-                    ModelPageIndex = 1,
-                    SourcePdfPath = rectoPdfPath,
-                    SourcePageIndex = 1
-                },
-                new PdfActionInsertImage
-                {
-                    ResultPageIndex = 2,
-                    ModelPdfPath = formPdfPath,
-                    ModelPageIndex = 2,
-                    SourcePdfPath = versoPdfPath,
-                    SourcePageIndex = 15
-                },
-                new PdfActionInsertImage
-                {
-                    ResultPageIndex = 3,
-                    ModelPdfPath = formPdfPath,
-                    ModelPageIndex = 3,
-                    SourcePdfPath = rectoPdfPath,
-                    SourcePageIndex = 2
-                },
-                new PdfActionInsertImage
-                {
-                    ResultPageIndex = 4,
-                    ModelPdfPath = formPdfPath,
-                    ModelPageIndex = 2,
-                    SourcePdfPath = versoPdfPath,
-                    SourcePageIndex = 14
-                }
-            };
+                };
+
+                var recto = (i % 2 == 1);
+
+                if (i == 1)
+                    a.ModelPageIndex = 1;
+                else if (recto)
+                    a.ModelPageIndex = 3;
+                else
+                    a.ModelPageIndex = 2;
+
+                a.SourcePdfPath = recto ? rectoPdfPath : versoPdfPath;
+
+                var index = (i + 1) / 2;
+
+                a.SourcePageIndex = recto ? index : versoPageCount + 1 - index;
+
+                actions.Add(a);
+            }
 
             return actions;
         }
+
+        //private static IEnumerable<PdfActionInsertImage> BuildActionsTEST(string formPdfPath, string rectoPdfPath, string versoPdfPath)
+        //{
+        //    var actions = new List<PdfActionInsertImage>
+        //    {
+        //        new PdfActionInsertImage
+        //        {
+        //            ResultPageIndex = 1,
+        //            ModelPdfPath = formPdfPath,
+        //            ModelPageIndex = 1,
+        //            SourcePdfPath = rectoPdfPath,
+        //            SourcePageIndex = 1
+        //        },
+        //        new PdfActionInsertImage
+        //        {
+        //            ResultPageIndex = 2,
+        //            ModelPdfPath = formPdfPath,
+        //            ModelPageIndex = 2,
+        //            SourcePdfPath = versoPdfPath,
+        //            SourcePageIndex = 15
+        //        },
+        //        new PdfActionInsertImage
+        //        {
+        //            ResultPageIndex = 3,
+        //            ModelPdfPath = formPdfPath,
+        //            ModelPageIndex = 3,
+        //            SourcePdfPath = rectoPdfPath,
+        //            SourcePageIndex = 2
+        //        },
+        //        new PdfActionInsertImage
+        //        {
+        //            ResultPageIndex = 4,
+        //            ModelPdfPath = formPdfPath,
+        //            ModelPageIndex = 2,
+        //            SourcePdfPath = versoPdfPath,
+        //            SourcePageIndex = 14
+        //        }
+        //    };
+
+        //    return actions;
+        //}
 
         public static void RunPdfActions(IEnumerable<PdfActionInsertImage> actions, string outputDirPath, string outputFileName)
         {
