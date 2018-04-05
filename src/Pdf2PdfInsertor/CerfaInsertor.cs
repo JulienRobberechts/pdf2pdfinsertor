@@ -21,7 +21,7 @@ namespace PdfTests
             var finalPdfPath = outputDirPath + outputFileName + ".pdf";
 
             // Concat each page into a single file....
-
+            PdfAgregator.ConcatPages(results, finalPdfPath);
         }
 
         public static PdfActionResult CreatePdfPage(PdfActionInsertImage action)
@@ -49,7 +49,7 @@ namespace PdfTests
             var resultPdfPath = tempDir + "page-" + resultPageIndex + ".pdf";
             InsertImageToPdf(action.ModelPdfPath, resultPdfPath, imgContentPath, modelPageIndex, rectDestination);
 
-            return new PdfActionResult() { ResultPdfPath = resultPdfPath, ResultPageIndex = resultPageIndex };
+            return new PdfActionResult { Action = action, ResultPdfPath = resultPdfPath };
         }
 
         private static Rectangle GetDestinationRect(string pdfPath, int pageIndex)

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PdfAction.cs" />
+    <Compile Include="PdfAgregator.cs" />
     <Compile Include="PdfToJpegConvertor.cs" />
     <Compile Include="CerfaInsertor.cs" />
     <Compile Include="Program.cs" />

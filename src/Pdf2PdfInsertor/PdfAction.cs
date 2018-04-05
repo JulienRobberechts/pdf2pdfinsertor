@@ -19,7 +19,7 @@ namespace PdfTests
 
     public class PdfActionResult
     {
-        public int ResultPageIndex { get; set; }
+        public PdfActionInsertImage Action { get; set; }
         public string ResultPdfPath { get; set; }
     }
 }

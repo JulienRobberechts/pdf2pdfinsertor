@@ -19,9 +19,13 @@ namespace Pdf2PdfInsertor.Test
             if (!File.Exists(formPdfPath))
                 throw new Exception($"File do not exsits: '{formPdfPath}'");
 
-            var inputContentPdfPath = Path.GetFullPath(@"./Pdf2PdfInsertor.Test/TestData/content-2pages.pdf");
-            if (!File.Exists(inputContentPdfPath))
-                throw new Exception($"File do not exsits: '{inputContentPdfPath}'");
+            var inputContentPdfPath1 = Path.GetFullPath(@"./Pdf2PdfInsertor.Test/TestData/content-2pages.pdf");
+            if (!File.Exists(inputContentPdfPath1))
+                throw new Exception($"File do not exsits: '{inputContentPdfPath1}'");
+
+            var inputContentPdfPath2 = Path.GetFullPath(@"./Pdf2PdfInsertor.Test/TestData/sample.pdf");
+            if (!File.Exists(inputContentPdfPath2))
+                throw new Exception($"File do not exsits: '{inputContentPdfPath2}'");
 
             string outputDirPath = Path.GetFullPath("./Pdf2PdfInsertor.Test/TestData/out/");
             var outputDir = new DirectoryInfo(outputDirPath);
@@ -42,8 +46,32 @@ namespace Pdf2PdfInsertor.Test
                     ResultPageIndex = 1,
                     ModelPdfPath = formPdfPath,
                     ModelPageIndex = 1,
-                    SourcePdfPath = inputContentPdfPath,
+                    SourcePdfPath = inputContentPdfPath1,
                     SourcePageIndex = 1
+                },
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 2,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 2,
+                    SourcePdfPath = inputContentPdfPath1,
+                    SourcePageIndex = 2
+                },
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 3,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 3,
+                    SourcePdfPath = inputContentPdfPath2,
+                    SourcePageIndex = 1
+                },
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 4,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 2,
+                    SourcePdfPath = inputContentPdfPath2,
+                    SourcePageIndex = 2
                 }
             };
             CerfaInsertor.Run(actions, outputDirPath, "final");
