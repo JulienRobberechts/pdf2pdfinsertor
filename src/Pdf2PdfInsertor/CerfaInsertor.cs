@@ -6,36 +6,50 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PdfTests
 {
-    public class CerfaInsertor
+    public static class CerfaInsertor
     {
-        public static void Run(string formPdfPath, string inputContentPdfPath, string name, string outputDir)
+        public static string tempDir = Path.GetTempPath();
+        public static int imgPixelFactor = 3;
+
+        public static void Run(IEnumerable<PdfActionInsertImage> actions, string outputDirPath, string outputFileName)
         {
-            var imgPixelFactor = 3;
-            // var formPdfPath = @"D:\temp\pdf\3265-sd_434.pdf";
-            // var inputContentPdfPath = @"D:\temp\pdf\1.pdf";
-            var outputPdfPath = outputDir + Path.GetFileNameWithoutExtension(formPdfPath) + " - " + name + ".pdf";
+            var results = actions.Select(a => CreatePdfPage(a)).ToList();
 
-            for (int pageIndex = 1; pageIndex <= 1; pageIndex++)
-            {
-                // Calculate Destination rectangle in the form
-                var rectDestination = GetDestinationRect(formPdfPath, pageIndex);
+            var finalPdfPath = outputDirPath + outputFileName + ".pdf";
 
-                // calculate image size
-                var rect = GetPageSize(inputContentPdfPath, pageIndex);
-                var imageSize = new System.Drawing.Size((int)(rect.Width * imgPixelFactor), (int)(rect.Height * imgPixelFactor));
+            // Concat each page into a single file....
 
-                // generate image
-                var img1PdfPath = outputDir + Path.GetFileNameWithoutExtension(inputContentPdfPath) + "-p" + pageIndex + ".jpeg";
-                PdfToJpegConvertor.RenderPage(inputContentPdfPath, pageIndex, imageSize, img1PdfPath);
+        }
 
-                // Insert image into Pdf
-                InsertImageToPdf(formPdfPath, outputPdfPath, img1PdfPath, pageIndex, rectDestination);
-            }
+        public static PdfActionResult CreatePdfPage(PdfActionInsertImage action)
+        {
+            // const int imgPixelFactor = 3;
+
+            var srcPageIndex = action.SourcePageIndex;
+            var modelPageIndex = action.ModelPageIndex;
+            var resultPageIndex = action.ResultPageIndex;
+
+            // Calculate Destination rectangle in the form
+            var rectDestination = GetDestinationRect(action.ModelPdfPath, modelPageIndex);
+
+            // calculate image size
+            var rect = GetPageSize(action.SourcePdfPath, srcPageIndex);
+            var imageSize = new System.Drawing.Size((int)(rect.Width * imgPixelFactor), (int)(rect.Height * imgPixelFactor));
+
+            // generate image
+            var imgContentPath = tempDir + Path.GetFileNameWithoutExtension(action.SourcePdfPath) + "-p" + srcPageIndex + ".jpeg";
+            PdfToJpegConvertor.RenderPage(action.SourcePdfPath, srcPageIndex, imageSize, imgContentPath);
+            if (!File.Exists(imgContentPath))
+                throw new Exception($"File do not exsits: '{imgContentPath}'");
+
+            // Insert image into Pdf
+            var resultPdfPath = tempDir + "page-" + resultPageIndex + ".pdf";
+            InsertImageToPdf(action.ModelPdfPath, resultPdfPath, imgContentPath, modelPageIndex, rectDestination);
+
+            return new PdfActionResult() { ResultPdfPath = resultPdfPath, ResultPageIndex = resultPageIndex };
         }
 
         private static Rectangle GetDestinationRect(string pdfPath, int pageIndex)
@@ -43,7 +57,6 @@ namespace PdfTests
             using (PdfReader reader = new PdfReader(pdfPath))
             {
                 reader.SelectPages(pageIndex.ToString());
-                // var pageSize = reader.GetPageSize(1);
                 AcroFields af = reader.AcroFields;
                 var fieldDestination = af.Fields.SingleOrDefault(kv => kv.Key.EndsWith("1"));
                 var positions = af.GetFieldPositions(fieldDestination.Key);
@@ -52,15 +65,14 @@ namespace PdfTests
             }
         }
 
-        private static void InsertImageToPdf(string inputPdfPath, string outputPdfPath, string imagePath, int pageIndex, Rectangle destinationRect)
+        private static void InsertImageToPdf(string inputPdfPath, string outputPdfPath, string imagePathToInsert, int destPageIndex, Rectangle destinationRect)
         {
-            using (Stream inputPdfStream = new FileStream(inputPdfPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (Stream inputImageStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (Stream inputImageStream = new FileStream(imagePathToInsert, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (Stream outputPdfStream = new FileStream(outputPdfPath, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (var pdfReader = new PdfReader(inputPdfPath))
+            using (var stamper = new PdfStamper(pdfReader, outputPdfStream))
             {
-                var reader = new PdfReader(inputPdfStream);
-                var stamper = new PdfStamper(reader, outputPdfStream);
-                var pdfContentByte = stamper.GetOverContent(pageIndex);
+                var pdfContentByte = stamper.GetOverContent(destPageIndex);
 
                 Image image = Image.GetInstance(inputImageStream);
 

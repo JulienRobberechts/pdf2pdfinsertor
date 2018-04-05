@@ -28,7 +28,25 @@ namespace Pdf2PdfInsertor.Test
             if (!outputDir.Exists)
                 outputDir.Create();
 
-            CerfaInsertor.Run(formPdfPath, inputContentPdfPath, "forTest", outputDirPath);
+            // for test:
+            string tmpDirPath = Path.GetFullPath("./Pdf2PdfInsertor.Test/TestData/tmp/");
+            var tmpDir = new DirectoryInfo(tmpDirPath);
+            if (!tmpDir.Exists)
+                tmpDir.Create();
+            CerfaInsertor.tempDir = tmpDirPath;
+
+            var actions = new List<PdfActionInsertImage>()
+            {
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 1,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 1,
+                    SourcePdfPath = inputContentPdfPath,
+                    SourcePageIndex = 1
+                }
+            };
+            CerfaInsertor.Run(actions, outputDirPath, "final");
         }
     }
 }
