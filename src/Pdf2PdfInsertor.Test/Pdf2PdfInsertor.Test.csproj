@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InsertImage.manualcheck.cs" />
+    <Compile Include="FullProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +61,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\cordat.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pdf2PdfInsertor\Pdf2PdfInsertor.csproj">
+      <Project>{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}</Project>
+      <Name>Pdf2PdfInsertor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

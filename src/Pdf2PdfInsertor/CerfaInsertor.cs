@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace PdfTests
 {
-    public class Insertor
+    public class CerfaInsertor
     {
-        public static void Insert()
+        public static void Run(string formPdfPath, string inputContentPdfPath, string name, string outputDir)
         {
             var imgPixelFactor = 3;
-            var formPdfPath = @"D:\temp\pdf\3265-sd_434.pdf";
-            var inputPdfPath = @"D:\temp\pdf\1.pdf";
-            var outputPdfPath = @"D:\temp\pdf\1-out.pdf";
+            // var formPdfPath = @"D:\temp\pdf\3265-sd_434.pdf";
+            // var inputContentPdfPath = @"D:\temp\pdf\1.pdf";
+            var outputPdfPath = outputDir + Path.GetFileNameWithoutExtension(formPdfPath) + " - " + name + ".pdf";
 
             for (int pageIndex = 1; pageIndex <= 1; pageIndex++)
             {
@@ -26,12 +26,12 @@ namespace PdfTests
                 var rectDestination = GetDestinationRect(formPdfPath, pageIndex);
 
                 // calculate image size
-                var rect = GetPageSize(inputPdfPath, pageIndex);
+                var rect = GetPageSize(inputContentPdfPath, pageIndex);
                 var imageSize = new System.Drawing.Size((int)(rect.Width * imgPixelFactor), (int)(rect.Height * imgPixelFactor));
 
                 // generate image
-                var img1PdfPath = @"D:\temp\pdf\" + $"1-{pageIndex}-img.jpeg";
-                PdfToJpegConvertor.RenderPage(inputPdfPath, pageIndex, imageSize, img1PdfPath);
+                var img1PdfPath = outputDir + Path.GetFileNameWithoutExtension(inputContentPdfPath) + "-p" + pageIndex + ".jpeg";
+                PdfToJpegConvertor.RenderPage(inputContentPdfPath, pageIndex, imageSize, img1PdfPath);
 
                 // Insert image into Pdf
                 InsertImageToPdf(formPdfPath, outputPdfPath, img1PdfPath, pageIndex, rectDestination);

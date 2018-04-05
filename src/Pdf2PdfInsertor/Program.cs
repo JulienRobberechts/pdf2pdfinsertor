@@ -14,7 +14,7 @@ namespace PdfTests
         {
             Console.WriteLine("Pdf 2 Pdf Insertor");
             Console.WriteLine("");
-            Insertor.Insert();
+            // CerfaInsertor.Run(args[0], args[1], args[2]);
             Console.WriteLine("Done.");
             // Console.ReadLine();
         }
