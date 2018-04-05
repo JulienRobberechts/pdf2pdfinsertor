@@ -14,7 +14,54 @@ namespace PdfTests
         public static string tempDir = Path.GetTempPath();
         public static int imgPixelFactor = 3;
 
-        public static void Run(IEnumerable<PdfActionInsertImage> actions, string outputDirPath, string outputFileName)
+        public static void InsertJudgmentIntoCerfa(string formPdfPath, string rectoPdfPath, string versoPdfPath, string outputDirPath, string outputFileName)
+        {
+            var actions = BuildActions(formPdfPath, rectoPdfPath, versoPdfPath);
+            RunPdfActions(actions, outputDirPath, outputFileName);
+        }
+
+        private static IEnumerable<PdfActionInsertImage> BuildActions(string formPdfPath, string rectoPdfPath, string versoPdfPath)
+        {
+            var actions = new List<PdfActionInsertImage>
+            {
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 1,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 1,
+                    SourcePdfPath = rectoPdfPath,
+                    SourcePageIndex = 1
+                },
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 2,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 2,
+                    SourcePdfPath = versoPdfPath,
+                    SourcePageIndex = 15
+                },
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 3,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 3,
+                    SourcePdfPath = rectoPdfPath,
+                    SourcePageIndex = 2
+                },
+                new PdfActionInsertImage
+                {
+                    ResultPageIndex = 4,
+                    ModelPdfPath = formPdfPath,
+                    ModelPageIndex = 2,
+                    SourcePdfPath = versoPdfPath,
+                    SourcePageIndex = 14
+                }
+            };
+
+            return actions;
+        }
+
+        public static void RunPdfActions(IEnumerable<PdfActionInsertImage> actions, string outputDirPath, string outputFileName)
         {
             var results = actions.Select(a => CreatePdfPage(a)).ToList();
 

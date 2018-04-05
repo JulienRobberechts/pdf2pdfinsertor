@@ -74,7 +74,7 @@ namespace Pdf2PdfInsertor.Test
                     SourcePageIndex = 2
                 }
             };
-            CerfaInsertor.Run(actions, outputDirPath, "final");
+            CerfaInsertor.RunPdfActions(actions, outputDirPath, "final");
         }
     }
 }
