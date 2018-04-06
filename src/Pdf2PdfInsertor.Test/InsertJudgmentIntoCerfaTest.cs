@@ -12,27 +12,32 @@ namespace Pdf2PdfInsertor.Test
     [TestFixture]
     public class InsertJudgmentIntoCerfaTest
     {
-        [Test]
-        public void InsertJudgmentIntoCerfa()
+        //[TestCase("FormCerfa-3265-sd_434", "ROBBERECHTS")]
+        [TestCase("FormCerfa-3265-01", "ROBBERECHTS")]
+        //[TestCase("FormCerfa-3265-sd_434", "THOMAS N")]
+        //[TestCase("FormCerfa-3265-01", "THOMAS N")]
+        public void InsertJudgmentIntoCerfa(string cerfa, string name)
         {
-            var formPdfPath = Path.GetFullPath(@"./../data/ModeleCerfa/FormCerfa-3265-sd_434.pdf");
+            var testDir = TestContext.CurrentContext.TestDirectory;
+
+            var formPdfPath = Path.GetFullPath($"{testDir}/../../../../data/ModeleCerfa/{cerfa}.pdf");
             if (!File.Exists(formPdfPath))
                 throw new Exception($"File do not exsits: '{formPdfPath}'");
 
-            var rectoPdfPath = Path.GetFullPath(@"./../data/Jugements/ROBBERECHTS/2014 RECTO JGT signifié ROBBERECHTS.pdf");
+            var rectoPdfPath = Path.GetFullPath($"{testDir}/../../../../data/Jugements/{name}/2014 RECTO JGT signifié {name}.pdf");
             if (!File.Exists(rectoPdfPath))
                 throw new Exception($"File do not exsits: '{rectoPdfPath}'");
 
-            var versoPdfPath = Path.GetFullPath(@"./../data/Jugements/ROBBERECHTS/2014 VERSO JGT signifié ROBBERECHTS.pdf");
+            var versoPdfPath = Path.GetFullPath($"{testDir}/../../../../data/Jugements/{name}/2014 VERSO JGT signifié {name}.pdf");
             if (!File.Exists(versoPdfPath))
                 throw new Exception($"File do not exsits: '{versoPdfPath}'");
 
-            string outputDirPath = Path.GetFullPath("./../data/CerfaRemplies/");
+            string outputDirPath = Path.GetFullPath($"{testDir}/../../../../data/CerfaRemplis/");
             var outputDir = new DirectoryInfo(outputDirPath);
             if (!outputDir.Exists)
                 outputDir.Create();
 
-            CerfaInsertor.InsertJudgmentIntoCerfa(formPdfPath, rectoPdfPath, versoPdfPath, outputDirPath, "CERFA-ROBBERECHTS");
+            CerfaInsertor.InsertJudgmentIntoCerfa(formPdfPath, rectoPdfPath, versoPdfPath, outputDirPath, $"{cerfa}-{name}");
         }
     }
 }

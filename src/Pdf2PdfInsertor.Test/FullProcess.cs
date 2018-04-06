@@ -12,7 +12,7 @@ namespace Pdf2PdfInsertor.Test
     [TestFixture]
     public class FullProcess
     {
-        [Test]
+        // [Test]
         public void RunFullProcess()
         {
             var formPdfPath = Path.GetFullPath(@"./Pdf2PdfInsertor.Test/TestData/FormCerfa-3265-sd_434.pdf");

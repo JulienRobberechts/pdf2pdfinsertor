@@ -144,7 +144,11 @@ namespace PdfTests
             {
                 reader.SelectPages(pageIndex.ToString());
                 AcroFields af = reader.AcroFields;
-                var fieldDestination = af.Fields.SingleOrDefault(kv => kv.Key.EndsWith("1"));
+                var fieldDestination = af.Fields.SingleOrDefault(kv => kv.Key.Length == 2 && Char.IsNumber(kv.Key[1]));
+
+                if (fieldDestination.Key == null)
+                    throw new Exception("No box found on the page");
+
                 var positions = af.GetFieldPositions(fieldDestination.Key);
                 var destRect = positions.First().position;
                 return destRect;
