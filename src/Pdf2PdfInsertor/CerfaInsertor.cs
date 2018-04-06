@@ -127,7 +127,7 @@ namespace PdfTests
 
             // generate image
             var imgContentPath = tempDir + Path.GetFileNameWithoutExtension(action.SourcePdfPath) + "-p" + srcPageIndex + ".jpeg";
-            PdfToJpegConvertor.RenderPage(action.SourcePdfPath, srcPageIndex, imageSize, imgContentPath);
+            PdfToJpegConvertor.GetPageAsImage(action.SourcePdfPath, srcPageIndex, imageSize, imgContentPath);
             if (!File.Exists(imgContentPath))
                 throw new Exception($"File do not exsits: '{imgContentPath}'");
 
@@ -167,7 +167,7 @@ namespace PdfTests
                 Image image = Image.GetInstance(inputImageStream);
 
                 image.ScaleToFit(destinationRect);
-                image.SetAbsolutePosition(destinationRect.GetLeft(0), destinationRect.GetBottom(0));
+                image.SetAbsolutePosition(destinationRect.GetLeft(0), destinationRect.GetTop(0) - image.PlainHeight);
 
                 pdfContentByte.AddImage(image);
                 stamper.Close();

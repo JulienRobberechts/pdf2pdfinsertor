@@ -17,7 +17,7 @@ namespace PdftoImgoConv
             return document.Render(pageNumber - 1, size.Width, size.Height, dpi, dpi, PdfRenderFlags.Annotations);
         }
 
-        public static void RenderPage(string pdfPath, int pageNumber, Size size, string outputPath)
+        public static void GetPageAsImage(string pdfPath, int pageNumber, Size size, string outputPath)
         {
             using (var document = PdfiumViewer.PdfDocument.Load(pdfPath))
             using (var stream = new FileStream(outputPath, FileMode.Create))
