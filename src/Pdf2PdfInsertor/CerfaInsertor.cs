@@ -35,6 +35,7 @@ namespace PdfTests
                 {
                     ResultPageIndex = i,
                     ModelPdfPath = formPdfPath,
+                    FullPageLabel = i.ToString() // +"/"+ totalPageCount // It's too large !
                 };
 
                 var recto = (i % 2 == 1);
@@ -98,7 +99,6 @@ namespace PdfTests
 
         //    return actions;
         //}
-
         public static void RunPdfActions(IEnumerable<PdfActionInsertImage> actions, string outputDirPath, string outputFileName)
         {
             var results = actions.Select(a => CreatePdfPage(a)).ToList();
@@ -131,12 +131,14 @@ namespace PdfTests
             if (!File.Exists(imgContentPath))
                 throw new Exception($"File do not exsits: '{imgContentPath}'");
 
+
             // Insert image into Pdf
             var resultPdfPath = tempDir + "page-" + resultPageIndex + ".pdf";
-            InsertImageToPdf(action.ModelPdfPath, resultPdfPath, imgContentPath, modelPageIndex, rectDestination);
+            InsertImageToPdf(action.ModelPdfPath, resultPdfPath, imgContentPath, modelPageIndex, rectDestination, action.FullPageLabel);
 
             return new PdfActionResult { Action = action, ResultPdfPath = resultPdfPath };
         }
+
 
         private static Rectangle GetDestinationRect(string pdfPath, int pageIndex)
         {
@@ -155,7 +157,7 @@ namespace PdfTests
             }
         }
 
-        private static void InsertImageToPdf(string inputPdfPath, string outputPdfPath, string imagePathToInsert, int destPageIndex, Rectangle destinationRect)
+        private static void InsertImageToPdf(string inputPdfPath, string outputPdfPath, string imagePathToInsert, int destPageIndex, Rectangle destinationRect, string fullpageLabel)
         {
             using (Stream inputImageStream = new FileStream(imagePathToInsert, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (Stream outputPdfStream = new FileStream(outputPdfPath, FileMode.Create, FileAccess.Write, FileShare.None))
@@ -164,12 +166,21 @@ namespace PdfTests
             {
                 var pdfContentByte = stamper.GetOverContent(destPageIndex);
 
+                // Insert Image
                 Image image = Image.GetInstance(inputImageStream);
-
                 image.ScaleToFit(destinationRect);
                 image.SetAbsolutePosition(destinationRect.GetLeft(0), destinationRect.GetTop(0) - image.PlainHeight);
-
                 pdfContentByte.AddImage(image);
+
+                // Change Page Number
+                var af = stamper.AcroFields;
+                var field = af.Fields.SingleOrDefault(kv => kv.Value.GetPage(0) == destPageIndex && kv.Key.Length == 2 && kv.Key[0] == 'L');
+
+                if (field.Key == null)
+                    throw new Exception("No page number found on the page");
+
+                af.SetField(field.Key, fullpageLabel);
+
                 stamper.Close();
             }
         }

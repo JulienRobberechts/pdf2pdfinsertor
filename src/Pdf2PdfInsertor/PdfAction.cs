@@ -15,6 +15,8 @@ namespace PdfTests
 
         public string ModelPdfPath { get; set; }
         public int ModelPageIndex { get; set; }
+
+        public string FullPageLabel { get; set; }
     }
 
     public class PdfActionResult

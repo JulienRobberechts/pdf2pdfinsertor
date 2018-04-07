@@ -37,6 +37,13 @@ namespace Pdf2PdfInsertor.Test
             if (!outputDir.Exists)
                 outputDir.Create();
 
+            // for test:
+            string tmpDirPath = Path.GetFullPath($"{testDir}/../../../../data/tmp/");
+            var tmpDir = new DirectoryInfo(tmpDirPath);
+            if (!tmpDir.Exists)
+                tmpDir.Create();
+            CerfaInsertor.tempDir = tmpDirPath;
+
             CerfaInsertor.InsertJudgmentIntoCerfa(formPdfPath, rectoPdfPath, versoPdfPath, outputDirPath, $"{cerfa}-{name}");
         }
     }
