@@ -42,8 +42,6 @@ namespace PdfTests
 
                 if (i == 1)
                     a.ModelPageIndex = 1;
-                else if (recto)
-                    a.ModelPageIndex = 3;
                 else
                     a.ModelPageIndex = 2;
 
@@ -67,38 +65,16 @@ namespace PdfTests
         //        {
         //            ResultPageIndex = 1,
         //            ModelPdfPath = formPdfPath,
-        //            ModelPageIndex = 1,
+        //            ModelPageIndex = 5,
         //            SourcePdfPath = rectoPdfPath,
-        //            SourcePageIndex = 1
-        //        },
-        //        new PdfActionInsertImage
-        //        {
-        //            ResultPageIndex = 2,
-        //            ModelPdfPath = formPdfPath,
-        //            ModelPageIndex = 2,
-        //            SourcePdfPath = versoPdfPath,
-        //            SourcePageIndex = 15
-        //        },
-        //        new PdfActionInsertImage
-        //        {
-        //            ResultPageIndex = 3,
-        //            ModelPdfPath = formPdfPath,
-        //            ModelPageIndex = 3,
-        //            SourcePdfPath = rectoPdfPath,
-        //            SourcePageIndex = 2
-        //        },
-        //        new PdfActionInsertImage
-        //        {
-        //            ResultPageIndex = 4,
-        //            ModelPdfPath = formPdfPath,
-        //            ModelPageIndex = 2,
-        //            SourcePdfPath = versoPdfPath,
-        //            SourcePageIndex = 14
+        //            SourcePageIndex = 3,
+        //            FullPageLabel = "XX"
         //        }
         //    };
 
         //    return actions;
         //}
+
         public static void RunPdfActions(IEnumerable<PdfActionInsertImage> actions, string outputDirPath, string outputFileName)
         {
             var results = actions.Select(a => CreatePdfPage(a)).ToList();
@@ -131,14 +107,15 @@ namespace PdfTests
             if (!File.Exists(imgContentPath))
                 throw new Exception($"File do not exsits: '{imgContentPath}'");
 
-
             // Insert image into Pdf
-            var resultPdfPath = tempDir + "page-" + resultPageIndex + ".pdf";
-            InsertImageToPdf(action.ModelPdfPath, resultPdfPath, imgContentPath, modelPageIndex, rectDestination, action.FullPageLabel);
+            var resultPdfPathA = tempDir + "page-" + resultPageIndex + "-a.pdf";
+            InsertImageToPdf(action.ModelPdfPath, resultPdfPathA, imgContentPath, modelPageIndex, rectDestination, action.FullPageLabel);
 
-            return new PdfActionResult { Action = action, ResultPdfPath = resultPdfPath };
+            var resultPdfPathB = tempDir + "page-" + resultPageIndex + "-b.pdf";
+            PdfReplacer.FixPageNumberOnPage(resultPdfPathA, resultPdfPathB, modelPageIndex, resultPageIndex.ToString());
+
+            return new PdfActionResult { Action = action, ResultPdfPath = resultPdfPathB };
         }
-
 
         private static Rectangle GetDestinationRect(string pdfPath, int pageIndex)
         {
