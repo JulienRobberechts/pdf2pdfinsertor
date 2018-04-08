@@ -47,7 +47,7 @@ namespace PdfTests
                 if (i == 1)
                     a.ModelPageIndex = 1;
                 else
-                    a.ModelPageIndex = 2;
+                    a.ModelPageIndex = 4;
 
                 a.SourcePdfPath = recto ? rectoPdfPath : versoPdfPath;
 
