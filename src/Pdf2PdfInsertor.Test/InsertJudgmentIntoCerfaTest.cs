@@ -12,10 +12,8 @@ namespace Pdf2PdfInsertor.Test
     [TestFixture]
     public class InsertJudgmentIntoCerfaTest
     {
-        //[TestCase("FormCerfa-3265-sd_434", "ROBBERECHTS")]
         [TestCase("FormCerfa-3265-01", "ROBBERECHTS")]
-        //[TestCase("FormCerfa-3265-sd_434", "THOMAS N")]
-        //[TestCase("FormCerfa-3265-01", "THOMAS N")]
+        [TestCase("FormCerfa-3265-01", "THOMAS N")]
         public void InsertJudgmentIntoCerfa(string cerfa, string name)
         {
             var testDir = TestContext.CurrentContext.TestDirectory;

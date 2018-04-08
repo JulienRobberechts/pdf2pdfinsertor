@@ -26,8 +26,8 @@ namespace PdfTests
 
             var pageCountToskipAtThaEndOfVerso = 2;
 
-            var rectoPageCount = 15;
-            var versoPageCount = 15;
+            var rectoPageCount = GetPageCount(rectoPdfPath);
+            var versoPageCount = GetPageCount(versoPdfPath);
 
             var totalPageCount = rectoPageCount + versoPageCount;
 
@@ -177,6 +177,14 @@ namespace PdfTests
                 reader.SelectPages(pageIndex.ToString());
                 var pageSize = reader.GetPageSize(1);
                 return pageSize;
+            }
+        }
+
+        private static int GetPageCount(string pdfPath)
+        {
+            using (PdfReader reader = new PdfReader(pdfPath))
+            {
+                return reader.NumberOfPages;
             }
         }
     }
