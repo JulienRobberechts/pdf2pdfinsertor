@@ -24,18 +24,22 @@ namespace PdfTests
         {
             var actions = new List<PdfActionInsertImage>();
 
+            var pageCountToskipAtThaEndOfVerso = 2;
+
             var rectoPageCount = 15;
             var versoPageCount = 15;
 
             var totalPageCount = rectoPageCount + versoPageCount;
 
+            var pageIndexDisplay = 1;
+
             for (int i = 1; i <= totalPageCount; i++)
             {
                 var a = new PdfActionInsertImage()
                 {
-                    ResultPageIndex = i,
+                    ResultPageIndex = pageIndexDisplay,
                     ModelPdfPath = formPdfPath,
-                    FullPageLabel = i.ToString() // +"/"+ totalPageCount // It's too large !
+                    FullPageLabel = pageIndexDisplay.ToString() // +"/"+ totalPageCount // It's too large !
                 };
 
                 var recto = (i % 2 == 1);
@@ -51,7 +55,11 @@ namespace PdfTests
 
                 a.SourcePageIndex = recto ? index : versoPageCount + 1 - index;
 
+                if (!recto && a.SourcePageIndex <= pageCountToskipAtThaEndOfVerso)
+                    continue;
+
                 actions.Add(a);
+                pageIndexDisplay++;
             }
 
             return actions;
