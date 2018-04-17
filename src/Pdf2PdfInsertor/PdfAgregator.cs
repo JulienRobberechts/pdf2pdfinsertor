@@ -36,7 +36,7 @@ namespace PdfTests
                 // Capture the correct size and orientation for the page:
                 using (var resultDoc = new Document(pageSize))
                 using (var fs = new FileStream(outputFilePath, FileMode.Create))
-                using (var pdfCopy = new PdfCopy(resultDoc, fs))
+                using (var pdfCopy = new PdfSmartCopy(resultDoc, fs))
                 {
                     resultDoc.Open();
                     foreach (var doc in docs)
