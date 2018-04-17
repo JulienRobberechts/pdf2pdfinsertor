@@ -14,13 +14,13 @@ namespace PdfTests
         public static string tempDir = Path.GetTempPath();
         public static int imgPixelFactor = 3;
 
-        public static void InsertJudgmentIntoCerfa(string formPdfPath, string rectoPdfPath, string versoPdfPath, string outputDirPath, string outputFileName)
+        public static void InsertJudgmentIntoCerfa(string formPdfPath, string rectoPdfPath, string versoPdfPath, string outputDirPath, string outputFileName, double? leftMarginInCm)
         {
-            var actions = BuildActions(formPdfPath, rectoPdfPath, versoPdfPath);
+            var actions = BuildActions(formPdfPath, rectoPdfPath, versoPdfPath, leftMarginInCm);
             RunPdfActions(actions, outputDirPath, outputFileName);
         }
 
-        private static IEnumerable<PdfActionInsertImage> BuildActions(string formPdfPath, string rectoPdfPath, string versoPdfPath)
+        private static IEnumerable<PdfActionInsertImage> BuildActions(string formPdfPath, string rectoPdfPath, string versoPdfPath, double? leftMarginInCm)
         {
             var actions = new List<PdfActionInsertImage>();
 
@@ -33,6 +33,13 @@ namespace PdfTests
 
             var pageIndexDisplay = 1;
 
+            // Calculated Ajusted Left Margin
+            double leftMarginInCmAdjusted = 3.9;
+            if (leftMarginInCm.HasValue && leftMarginInCm >= 0 && leftMarginInCm < 21.0)
+                leftMarginInCmAdjusted = leftMarginInCm.Value; // Error correction
+            leftMarginInCmAdjusted += 0.5;// Error correction
+            int leftMarginInImgPx = (int)Math.Round(leftMarginInCmAdjusted * 1766 / 21);
+
             for (int i = 1; i <= totalPageCount; i++)
             {
                 var a = new PdfActionInsertImage()
@@ -42,9 +49,7 @@ namespace PdfTests
                     FullPageLabel = pageIndexDisplay.ToString() // +"/"+ totalPageCount // It's too large !
                 };
 
-                var marginInCm = 3.9 + 0.5; // Error correction
-                int marginInImgPx = (int)Math.Round(marginInCm * 1766 / 21);
-                a.SourceMarginLeft = (i == 1) ? 0 : marginInImgPx; // magic number
+                // a.SourceMarginLeft = (i == 1) ? 0 : leftMarginInImgPx; // magic number
 
                 var recto = (i % 2 == 1);
 

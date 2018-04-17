@@ -42,7 +42,23 @@ namespace Pdf2PdfInsertor.Test
                 tmpDir.Create();
             CerfaInsertor.tempDir = tmpDirPath;
 
-            CerfaInsertor.InsertJudgmentIntoCerfa(formPdfPath, rectoPdfPath, versoPdfPath, outputDirPath, $"{cerfa}-{name}");
+            // Extract Margin from a Config file
+            double? leftMarginInCm = null;
+
+            var srcDirPath = Path.GetDirectoryName(rectoPdfPath);
+            var srcDir = new DirectoryInfo(srcDirPath);
+            var files = srcDir.GetFiles("Marge *.txt", SearchOption.TopDirectoryOnly);
+            if (files.Count() > 1)
+                throw new Exception("Multiple margin parameter files");
+
+            if (files.Count() == 1)
+            {
+                var marginString = files.First().Name.ToLower().Replace("marge ","").Replace("cm", "").Replace(".txt", "").Trim();
+                if (Double.TryParse(marginString, out double margin))
+                    leftMarginInCm = margin;
+            }
+
+            CerfaInsertor.InsertJudgmentIntoCerfa(formPdfPath, rectoPdfPath, versoPdfPath, outputDirPath, $"{cerfa}-{name}", leftMarginInCm);
         }
     }
 }
