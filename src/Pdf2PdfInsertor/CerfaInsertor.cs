@@ -42,7 +42,9 @@ namespace PdfTests
                     FullPageLabel = pageIndexDisplay.ToString() // +"/"+ totalPageCount // It's too large !
                 };
 
-                a.SourceMarginLeft = (i == 1) ? 0 : 340; // magic number
+                var marginInCm = 3.9 + 0.5; // Error correction
+                int marginInImgPx = (int)Math.Round(marginInCm * 1766 / 21);
+                a.SourceMarginLeft = (i == 1) ? 0 : marginInImgPx; // magic number
 
                 var recto = (i % 2 == 1);
 
