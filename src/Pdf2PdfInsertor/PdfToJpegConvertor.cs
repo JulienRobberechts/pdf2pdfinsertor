@@ -1,30 +1,35 @@
 ﻿using PdfiumViewer;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 
 namespace PdftoImgoConv
 {
     public static class PdfToJpegConvertor
     {
-        private static Image GetPageImage(int pageNumber, Size size, PdfiumViewer.PdfDocument document, int dpi)
+        public static void GetPageAsImage(string pdfPath, int pageNumber, Size size, int marginLeft, int marginTop, int marginRight, int marginBottom, string outputPath)
         {
-            return document.Render(pageNumber - 1, size.Width, size.Height, dpi, dpi, PdfRenderFlags.Annotations);
+            int dpi = 150;
+
+            using (var document = PdfDocument.Load(pdfPath))
+            using (var image = GetPageImage(pageNumber, size, document, dpi))
+            {
+                Rectangle cropArea = new Rectangle(
+                    marginLeft,
+                    marginTop,
+                    image.Size.Width - marginLeft - marginRight,
+                    image.Size.Height - marginTop - marginBottom);
+                Bitmap bmpImage = new Bitmap(image);
+                var cropedBmpImage = bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+
+                using (var stream = new FileStream(outputPath, FileMode.Create))
+                    cropedBmpImage.Save(stream, ImageFormat.Jpeg);
+            }
         }
 
-        public static void GetPageAsImage(string pdfPath, int pageNumber, Size size, string outputPath)
+        private static Image GetPageImage(int pageNumber, Size size, PdfDocument document, int dpi)
         {
-            using (var document = PdfiumViewer.PdfDocument.Load(pdfPath))
-            using (var stream = new FileStream(outputPath, FileMode.Create))
-            using (var image = GetPageImage(pageNumber, size, document, 150))
-            {
-                image.Save(stream, ImageFormat.Jpeg);
-            }
+            return document.Render(pageNumber - 1, size.Width, size.Height, dpi, dpi, PdfRenderFlags.Annotations);
         }
     }
 }

@@ -42,6 +42,8 @@ namespace PdfTests
                     FullPageLabel = pageIndexDisplay.ToString() // +"/"+ totalPageCount // It's too large !
                 };
 
+                a.SourceMarginLeft = (i == 1) ? 0 : 340; // magic number
+
                 var recto = (i % 2 == 1);
 
                 if (i == 1)
@@ -111,7 +113,7 @@ namespace PdfTests
 
             // generate image
             var imgContentPath = tempDir + Path.GetFileNameWithoutExtension(action.SourcePdfPath) + "-p" + srcPageIndex + ".jpeg";
-            PdfToJpegConvertor.GetPageAsImage(action.SourcePdfPath, srcPageIndex, imageSize, imgContentPath);
+            PdfToJpegConvertor.GetPageAsImage(action.SourcePdfPath, srcPageIndex, imageSize, action.SourceMarginLeft, 0, 0, 0, imgContentPath);
             if (!File.Exists(imgContentPath))
                 throw new Exception($"File do not exsits: '{imgContentPath}'");
 

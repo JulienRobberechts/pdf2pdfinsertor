@@ -12,6 +12,7 @@ namespace PdfTests
 
         public string SourcePdfPath { get; set; }
         public int SourcePageIndex { get; set; }
+        public int SourceMarginLeft { get; set; }
 
         public string ModelPdfPath { get; set; }
         public int ModelPageIndex { get; set; }
