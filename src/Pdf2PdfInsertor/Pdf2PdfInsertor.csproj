@@ -1,20 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86_64.v8-xfa.props" Condition="Exists('..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86_64.v8-xfa.props')" />
-  <Import Project="..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86.v8-xfa.props" Condition="Exists('..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86.v8-xfa.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}</ProjectGuid>
+    <ProjectGuid>{577D8190-3E7E-4F54-AA50-0DCEAE4AC0F7}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>PdfTests</RootNamespace>
-    <AssemblyName>PdfTests</AssemblyName>
+    <RootNamespace>Pdf2PdfInsertor</RootNamespace>
+    <AssemblyName>Pdf2PdfInsertor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -36,15 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
-    </Reference>
-    <Reference Include="PdfiumViewer, Version=2.13.0.0, Culture=neutral, PublicKeyToken=91e4789cfb0609e0, processorArchitecture=MSIL">
-      <HintPath>..\packages\PdfiumViewer.2.13.0.0\lib\net20\PdfiumViewer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,24 +42,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PdfAction.cs" />
-    <Compile Include="PdfAgregator.cs" />
-    <Compile Include="PdfReplacer.cs" />
-    <Compile Include="PdfToJpegConvertor.cs" />
-    <Compile Include="CerfaInsertor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pdf2PdfInsertor.ConsoleUi\Pdf2PdfInsertor.ConsoleUi.csproj">
+      <Project>{f40d5a42-0b7b-48a4-801c-7428e7586f89}</Project>
+      <Name>Pdf2PdfInsertor.ConsoleUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pdf2PdfInsertor.Core.Itf\Pdf2PdfInsertor.Core.Itf.csproj">
+      <Project>{451567DD-268B-49FC-BF58-1DCB3A21636A}</Project>
+      <Name>Pdf2PdfInsertor.Core.Itf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Pdf2PdfInsertor.Core\Pdf2PdfInsertor.Core.csproj">
+      <Project>{8bf1eef7-5789-4b58-a5fa-dc45d9adee52}</Project>
+      <Name>Pdf2PdfInsertor.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PdfiumViewer.Native.x86.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86.v8-xfa.props'))" />
-    <Error Condition="!Exists('..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86_64.v8-xfa.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PdfiumViewer.Native.x86_64.v8-xfa.2018.4.1.255\Build\PdfiumViewer.Native.x86_64.v8-xfa.props'))" />
-  </Target>
 </Project>

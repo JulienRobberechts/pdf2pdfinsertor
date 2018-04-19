@@ -1,22 +1,23 @@
-﻿using iTextSharp.awt.geom;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using PdftoImgoConv;
+﻿using Pdf2PdfInsertor.ConsoleUi;
+using Pdf2PdfInsertor.Core.Itf;
+using PdfTests;
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PdfTests
+namespace Pdf2PdfInsertor
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Pdf 2 Pdf Insertor");
-            Console.WriteLine("");
-            // CerfaInsertor.Run(args[0], args[1], args[2]);
-            Console.WriteLine("Done.");
-            // Console.ReadLine();
+            MainConsoleUi ui = new MainConsoleUi();
+            ICerfaInsertor pdfService = new CerfaInsertor();
+            IJugementsRepository jugementsRepository = new JugementsArgsGenerator();
+
+            ui.Run(jugementsRepository, pdfService);
         }
     }
 }

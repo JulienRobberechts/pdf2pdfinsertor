@@ -1,6 +1,8 @@
 ﻿using iTextSharp.awt.geom;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Pdf2PdfInsertor.Core.Itf;
+using Pdf2PdfInsertor.Core.Itf.Model;
 using PdftoImgoConv;
 using System;
 using System.Collections.Generic;
@@ -9,15 +11,15 @@ using System.Linq;
 
 namespace PdfTests
 {
-    public static class CerfaInsertor
+    public class CerfaInsertor : ICerfaInsertor
     {
         public static string tempDir = Path.GetTempPath();
         public static int imgPixelFactor = 3;
 
-        public static void InsertJudgmentIntoCerfa(string formPdfPath, string rectoPdfPath, string versoPdfPath, string outputDirPath, string outputFileName, double? leftMarginInCm)
+        public void InsertJudgmentIntoCerfa(JugementArgs jugementArgs)
         {
-            var actions = BuildActions(formPdfPath, rectoPdfPath, versoPdfPath, leftMarginInCm);
-            RunPdfActions(actions, outputDirPath, outputFileName);
+            var actions = BuildActions(jugementArgs.FormPdfPath, jugementArgs.RectoPdfPath, jugementArgs.VersoPdfPath, jugementArgs.leftMarginInCm);
+            RunPdfActions(actions, jugementArgs.OutputDirPath, jugementArgs.OutputFileName);
         }
 
         private static IEnumerable<PdfActionInsertImage> BuildActions(string formPdfPath, string rectoPdfPath, string versoPdfPath, double? leftMarginInCm)

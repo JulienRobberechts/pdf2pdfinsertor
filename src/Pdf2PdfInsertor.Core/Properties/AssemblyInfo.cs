@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Pdf2PdfInsertor")]
+[assembly: AssemblyTitle("PdfTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Pdf2PdfInsertor")]
+[assembly: AssemblyProduct("PdfTests")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("577d8190-3e7e-4f54-aa50-0dceae4ac0f7")]
+[assembly: Guid("8bf1eef7-5789-4b58-a5fa-dc45d9adee52")]
 
 // Version information for an assembly consists of the following four values:
 //

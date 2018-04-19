@@ -51,22 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InsertJudgmentIntoCerfaTest.cs" />
     <Compile Include="FullProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="TestData\content-1.pdf" />
-    <None Include="TestData\FormCerfa-3265-sd_434.pdf" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestData\cordat.jpeg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Pdf2PdfInsertor\Pdf2PdfInsertor.csproj">
-      <Project>{8BF1EEF7-5789-4B58-A5FA-DC45D9ADEE52}</Project>
-      <Name>Pdf2PdfInsertor</Name>
+    <ProjectReference Include="..\Pdf2PdfInsertor.Core\Pdf2PdfInsertor.Core.csproj">
+      <Project>{8bf1eef7-5789-4b58-a5fa-dc45d9adee52}</Project>
+      <Name>Pdf2PdfInsertor.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
