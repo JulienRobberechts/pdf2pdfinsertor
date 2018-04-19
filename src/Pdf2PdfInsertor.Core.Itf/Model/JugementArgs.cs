@@ -14,6 +14,7 @@ namespace Pdf2PdfInsertor.Core.Itf.Model
         public string OutputDirPath { get; set; }
         public string OutputFileName { get; set; }
 
-        public double? leftMarginInCm { get; set; }
+        public double? LeftMarginInCm { get; set; }
+        public int? SkipVersoPages { get; set; }
     }
 }

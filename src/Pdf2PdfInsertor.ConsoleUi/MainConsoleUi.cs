@@ -1,6 +1,7 @@
 ﻿using Pdf2PdfInsertor.Core.Itf;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Pdf2PdfInsertor.ConsoleUi
@@ -16,17 +17,18 @@ namespace Pdf2PdfInsertor.ConsoleUi
                     Console.WriteLine("Pdf 2 Pdf Insertor");
                     Console.WriteLine("");
 
-                    Console.WriteLine("");
+                    Console.WriteLine("Currrent Directory:");
+                    Console.WriteLine("\t" + Directory.GetCurrentDirectory());
 
-                    string cerfaFormPath = @"D:\DDD - CONSULTING SOFT\08 - DevProjects\Pdf2PdfInsertor\data\ModeleCerfa\FormCerfa-3265-01.pdf";
-                    Console.WriteLine("Cerfa Model:");
-                    Console.WriteLine("\t" + cerfaFormPath);
-
-                    string jugementsDirPath = @"D:\DDD - CONSULTING SOFT\08 - DevProjects\Pdf2PdfInsertor\data\Jugements\";
+                    string jugementsDirPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Jugements"));
                     Console.WriteLine("Jugements Source Directory:");
                     Console.WriteLine("\t" + jugementsDirPath);
 
-                    string outDirPath = @"D:\DDD - CONSULTING SOFT\08 - DevProjects\Pdf2PdfInsertor\data\CerfaRemplis\";
+                    string cerfaFormPath = Path.GetFullPath($"{jugementsDirPath}/../Cerfa-3265.pdf");
+                    Console.WriteLine("Cerfa Model:");
+                    Console.WriteLine("\t" + cerfaFormPath);
+
+                    string outDirPath = Path.GetFullPath($"{jugementsDirPath}/../CerfaRemplis/");
                     Console.WriteLine("Output Directory:");
                     Console.WriteLine("\t" + outDirPath);
 

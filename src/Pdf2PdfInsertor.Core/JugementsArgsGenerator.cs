@@ -46,14 +46,15 @@ namespace PdfTests
                     VersoPdfPath = versoPdfPath,
                     OutputDirPath = outDirPath,
                     OutputFileName = $"{name}-{cerfaFileName}",
-                    leftMarginInCm = GetParameterFromFile($"{jugementsDirPath}/{name}", "marge")
+                    LeftMarginInCm = (double?)GetParameterFromFile<double>($"{jugementsDirPath}/{name}", "marge"),
+                    SkipVersoPages = (int?)GetParameterFromFile<int>($"{jugementsDirPath}/{name}", "skipversopages")
                 });
             }
 
             return jugements;
         }
 
-        private double? GetParameterFromFile(string srcDirPath, string parameterName)
+        private object GetParameterFromFile<T>(string srcDirPath, string parameterName)
         {
             var srcDir = new DirectoryInfo(srcDirPath);
             var files = srcDir.GetFiles($"{parameterName} *.txt", SearchOption.TopDirectoryOnly);
@@ -68,8 +69,10 @@ namespace PdfTests
                     .Replace(".txt", "")
                     .Trim();
 
-                if (Double.TryParse(paramAsString, out double paramValue))
-                    return paramValue;
+                if (typeof(T) == typeof(double) && Double.TryParse(paramAsString, out double paramDoubleValue))
+                    return paramDoubleValue;
+                else if (typeof(T) == typeof(int) && Int32.TryParse(paramAsString, out int paramIntValue))
+                    return paramIntValue;
             }
 
             return null;
@@ -77,7 +80,8 @@ namespace PdfTests
 
         private void CheckDirOrCreate(string dirName, string dirPath)
         {
-            var parentDirPath = Path.GetDirectoryName(dirPath);
+            dirPath = Path.GetFullPath(dirPath + "/");
+            var parentDirPath = Path.GetDirectoryName(Path.GetDirectoryName(dirPath));
             if (!Directory.Exists(parentDirPath))
                 throw new Exception($"Directory Parent for '{dirName}' do not exsits: '{parentDirPath}'");
 

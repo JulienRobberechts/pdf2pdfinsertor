@@ -18,18 +18,16 @@ namespace PdfTests
 
         public void InsertJudgmentIntoCerfa(JugementArgs jugementArgs)
         {
-            var actions = BuildActions(jugementArgs.FormPdfPath, jugementArgs.RectoPdfPath, jugementArgs.VersoPdfPath, jugementArgs.leftMarginInCm);
+            var actions = BuildActions(jugementArgs);
             RunPdfActions(actions, jugementArgs.OutputDirPath, jugementArgs.OutputFileName);
         }
 
-        private static IEnumerable<PdfActionInsertImage> BuildActions(string formPdfPath, string rectoPdfPath, string versoPdfPath, double? leftMarginInCm)
+        private static IEnumerable<PdfActionInsertImage> BuildActions(JugementArgs jugementArgs)
         {
             var actions = new List<PdfActionInsertImage>();
 
-            var pageCountToskipAtThaEndOfVerso = 2;
-
-            var rectoPageCount = GetPageCount(rectoPdfPath);
-            var versoPageCount = GetPageCount(versoPdfPath);
+            var rectoPageCount = GetPageCount(jugementArgs.RectoPdfPath);
+            var versoPageCount = GetPageCount(jugementArgs.VersoPdfPath);
 
             var totalPageCount = rectoPageCount + versoPageCount;
 
@@ -37,21 +35,28 @@ namespace PdfTests
 
             // Calculated Ajusted Left Margin
             double leftMarginInCmAdjusted = 3.9;
-            if (leftMarginInCm.HasValue && leftMarginInCm >= 0 && leftMarginInCm < 21.0)
-                leftMarginInCmAdjusted = leftMarginInCm.Value; // Error correction
+            if (jugementArgs.LeftMarginInCm.HasValue && jugementArgs.LeftMarginInCm >= 0 && jugementArgs.LeftMarginInCm < 21.0)
+                leftMarginInCmAdjusted = jugementArgs.LeftMarginInCm.Value; // Error correction
             leftMarginInCmAdjusted += 0.5;// Error correction
             int leftMarginInImgPx = (int)Math.Round(leftMarginInCmAdjusted * 1766 / 21);
+
+            // 
+
+            var pageCountToSkipAtTheEndOfVerso = 2;
+
+            if( jugementArgs.SkipVersoPages.HasValue && jugementArgs.SkipVersoPages >=0)
+                pageCountToSkipAtTheEndOfVerso = jugementArgs.SkipVersoPages.Value;
 
             for (int i = 1; i <= totalPageCount; i++)
             {
                 var a = new PdfActionInsertImage()
                 {
                     ResultPageIndex = pageIndexDisplay,
-                    ModelPdfPath = formPdfPath,
+                    ModelPdfPath = jugementArgs.FormPdfPath,
                     FullPageLabel = pageIndexDisplay.ToString() // +"/"+ totalPageCount // It's too large !
                 };
 
-                // a.SourceMarginLeft = (i == 1) ? 0 : leftMarginInImgPx; // magic number
+                a.SourceMarginLeft = (i == 1) ? 0 : leftMarginInImgPx; // magic number
 
                 var recto = (i % 2 == 1);
 
@@ -60,13 +65,13 @@ namespace PdfTests
                 else
                     a.ModelPageIndex = 4;
 
-                a.SourcePdfPath = recto ? rectoPdfPath : versoPdfPath;
+                a.SourcePdfPath = recto ? jugementArgs.RectoPdfPath : jugementArgs.VersoPdfPath;
 
                 var index = (i + 1) / 2;
 
                 a.SourcePageIndex = recto ? index : versoPageCount + 1 - index;
 
-                if (!recto && a.SourcePageIndex <= pageCountToskipAtThaEndOfVerso)
+                if (!recto && a.SourcePageIndex <= pageCountToSkipAtTheEndOfVerso)
                     continue;
 
                 actions.Add(a);
