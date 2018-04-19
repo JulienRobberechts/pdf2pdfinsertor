@@ -32,10 +32,10 @@ namespace PdfTests
             {
                 var name = Path.GetFileName(namePath);
 
-                var rectoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name}/2014 RECTO JGT signifié {name}.pdf");
+                var rectoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name}/{name} RECTO.pdf");
                 CheckFile("Recto Pdf", rectoPdfPath);
 
-                var versoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name}/2014 VERSO JGT signifié {name}.pdf");
+                var versoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name}/{name} VERSO.pdf");
                 CheckFile("Verso Pdf", versoPdfPath);
 
                 jugements.Add(new JugementArgs()
