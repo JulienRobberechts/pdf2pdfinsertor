@@ -26,16 +26,16 @@ namespace PdfTests
             //CerfaInsertor.tempDir = tmpDirPath;
 
             var jugements = new List<JugementArgs>();
-            var namePaths = Directory.GetDirectories(jugementsDirPath);
+            var namePaths = Directory.GetFiles(jugementsDirPath, "* RECTO.pdf");
 
             foreach (var namePath in namePaths)
             {
-                var name = Path.GetFileName(namePath);
+                var name = Path.GetFileName(namePath).Replace("RECTO.pdf", "").Trim();
 
-                var rectoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name}/{name} RECTO.pdf");
+                var rectoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name} RECTO.pdf");
                 CheckFile("Recto Pdf", rectoPdfPath);
 
-                var versoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name}/{name} VERSO.pdf");
+                var versoPdfPath = Path.GetFullPath($"{jugementsDirPath}/{name} VERSO.pdf");
                 CheckFile("Verso Pdf", versoPdfPath);
 
                 jugements.Add(new JugementArgs()
@@ -46,24 +46,26 @@ namespace PdfTests
                     VersoPdfPath = versoPdfPath,
                     OutputDirPath = outDirPath,
                     OutputFileName = $"{name}-{cerfaFileName}",
-                    LeftMarginInCm = (double?)GetParameterFromFile<double>($"{jugementsDirPath}/{name}", "marge"),
-                    SkipVersoPages = (int?)GetParameterFromFile<int>($"{jugementsDirPath}/{name}", "skipversopages")
+                    LeftMarginInCm = (double?)GetParameterFromFile<double>($"{jugementsDirPath}", $"{name} ", "marge"),
+                    SkipVersoPages = (int?)GetParameterFromFile<int>($"{jugementsDirPath}", $"{name} ", "skipversopages")
                 });
             }
 
             return jugements;
         }
 
-        private object GetParameterFromFile<T>(string srcDirPath, string parameterName)
+        private object GetParameterFromFile<T>(string srcDirPath, string fileNamePrefix, string parameterName)
         {
             var srcDir = new DirectoryInfo(srcDirPath);
-            var files = srcDir.GetFiles($"{parameterName} *.txt", SearchOption.TopDirectoryOnly);
+            var files = srcDir.GetFiles($"{fileNamePrefix}{parameterName} *.txt", SearchOption.TopDirectoryOnly);
             if (files.Count() > 1)
                 throw new Exception($"There is multiple '{parameterName}' parameter files in the directory '{srcDirPath}'");
 
             if (files.Count() == 1)
             {
-                var paramAsString = files.First().Name.ToLower()
+                var fileName = files.First().Name;
+                var paramAsString = fileName.ToLower()
+                    .Replace(fileNamePrefix.ToLower(),"")
                     .Replace($"{parameterName} ", "")
                     .Replace("cm", "")
                     .Replace(".txt", "")
@@ -73,6 +75,8 @@ namespace PdfTests
                     return paramDoubleValue;
                 else if (typeof(T) == typeof(int) && Int32.TryParse(paramAsString, out int paramIntValue))
                     return paramIntValue;
+                else
+                    throw new Exception($"parameter not found in file '{fileName}'");
             }
 
             return null;
